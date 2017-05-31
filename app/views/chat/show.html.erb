@@ -1,0 +1,8 @@
+<div id='chat' data-id='<%= @chat.id %>'
+               data-me='<%= current_user.username %>'
+               data-them='<%= @recipient.username %>'>
+  <div id="messages">
+    <%= render @messages %>
+  </div>
+  <textarea id="message_composer"></textarea>
+</div>

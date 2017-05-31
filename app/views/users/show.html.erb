@@ -1,0 +1,13 @@
+<h1>Set username</h1>
+
+<div class="well">
+  <div class="row">
+    <div class="col-xs-6 col-md-4">
+      <%= simple_form_for(current_user, url: :user, html: { class: 'form-horizon
+      tal' }) do |f| %>
+        <%= f.input "username" %>
+        <%= f.button :submit, "Continue" %>
+      <% end %>
+    </div>
+  </div>
+</div>

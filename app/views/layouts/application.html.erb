@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Virgil Encrypted Communication</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <!-- TODO: (0) Add the Virgil JS file -->
+  </head>
+
+  <body>
+    <div class="container">
+      <%= render partial: 'header' %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

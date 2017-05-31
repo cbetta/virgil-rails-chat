@@ -1,0 +1,3 @@
+<h2>Contacts</h2>
+
+<%= render User.with_username.except_for(current_user) %>

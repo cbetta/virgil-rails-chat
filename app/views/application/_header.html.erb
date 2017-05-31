@@ -1,0 +1,23 @@
+<div class='text-right'>
+  <% if user_signed_in? %>
+    <span class="username">
+      <%= current_user.username %>
+    </span>
+  <% end %>
+
+  <% if @chat %>
+    <%= link_to "Users",
+                :root,
+                class: 'btn btn-default' %>
+  <% end %>
+
+
+  <% if user_signed_in? %>
+
+    <%= link_to "Log Out",
+                destroy_user_session_path,
+                method: :delete,
+                data: { confirm: 'Are you sure?' },
+                class: 'btn btn-danger' %>
+  <% end %>
+</div>

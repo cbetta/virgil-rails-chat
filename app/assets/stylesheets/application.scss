@@ -1,0 +1,62 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+body {
+  margin-top: 1em;
+}
+
+.username {
+  color: #999;
+  margin-right: 1em;
+}
+
+.user {
+  padding: 1em;
+  font-size: 20px;
+  display: block;
+
+  &:nth-child(2n-1) {
+    background-color: #ddd;
+  }
+
+  &:nth-child(2n) {
+    background-color: #eee;
+  }
+}
+
+#chat {
+  margin-top: 1em;
+
+  textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    height: 3em;
+    padding: 0.7em 1em;
+    // TODO: (9) Hide the message composer by default
+  }
+
+  .message {
+    padding: 1em;
+
+    .author {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .timestamp {
+      font-size: 0.8em;
+      color: #999;
+      float: right;
+    }
+
+    // TODO: (17) Hide encrypted messages
+
+    &:nth-child(2n-1) {
+      background-color: #ddd;
+    }
+
+    &:nth-child(2n) {
+      background-color: #eee;
+    }
+  }
+}
