@@ -32,7 +32,7 @@ body {
     border: 1px solid #ddd;
     height: 3em;
     padding: 0.7em 1em;
-    // TODO: (9) Hide the message composer by default
+    display: none;
   }
 
   .message {
@@ -49,7 +49,9 @@ body {
       float: right;
     }
 
-    // TODO: (17) Hide encrypted messages
+    .content[data-encrypted=true] {
+      display: none;
+    }
 
     &:nth-child(2n-1) {
       background-color: #ddd;

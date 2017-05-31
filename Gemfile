@@ -28,4 +28,4 @@ gem 'devise'
 gem 'bootstrap-sass'
 gem 'devise-bootstrapped'
 gem 'simple_form'
-# TODO: (10) Add Virgil SDK
+gem 'virgil-sdk', '~> 4.2.6'

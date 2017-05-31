@@ -1,8 +1,9 @@
 $(function(){
   var chatId = $('#chat').data('id');
-  // TODO: (1) Initialize Virgil API
-  // TODO: (2) Determine sender and receiver
-  // TODO: (3) Declare my Virgil private key
+  var api = virgil.API("AT.1cde554c5a649b17fd9e07157e1a7db7fac61d71218b71082635795b6356e8eb");
+  var myUsername = $('#chat').data('me');
+  var theirUsername = $('#chat').data('them');
+  var myKey = null;
 
   // Initialize our channel
   App.chat = App.cable.subscriptions.create({
@@ -10,44 +11,68 @@ $(function(){
     id: $('#chat').data('id')
   }, {
     connected: function () {
-      // TODO: (4) Try to load my private key, if there us none
-      // we will want to create it and register a Virgil Card
-      // for it
+      api.keys.load(myUsername)
+        .then(initKey)
+        .catch(createKeyAndCard)
+        // this always happens
+        .then(initUI);
     },
 
     // when we receive a new message, show it
     received: function(data) {
       $('#messages').append(data.message);
-      // TODO: (19) decrypt any new messages
+      decryptMessages();
     },
 
     // when a new message is ready,
     // we send the message over the ActionCable
     speak: function(message) {
-      // TODO: (15) Encrypt the message before we send it
-      App.chat.perform('speak', {
-        message: message,
-        id: chatId
+      api.cards.find([myUsername, theirUsername])
+        .then(function(cards) {
+          var cipher = myKey.signThenEncrypt(message, cards).toString('base64');
+          App.chat.perform('speak', {
+            message: cipher,
+            id: chatId
+          });
+        });
+    },
+
+    publishCard: function(card) {
+      this.perform('publishCard', {
+        card: card.export()
       });
     }
-
-    // TODO: (8) Define a new cable method to publish
-    // a Virgil Card to the server
   });
 
-  // TODO: (5) Set myKey to the loaded or created key
+  function initKey(key) {
+    myKey = key;
+  }
 
-  // TODO: (6) Define a method that creates a key and card,
-  // and then publishes it
+  function createKeyAndCard() {
+    myKey = api.keys.generate();
+    myKey.save(myUsername);
+    var card = api.cards.create(myUsername, myKey);
+    App.chat.publishCard(card);
+  }
 
-  // TODO: (7) Define a method that Initializes the UI once a
-  // private key is ready
+  function initUI() {
+    $('#message_composer').show();
+    decryptMessages();
+  }
 
-  // TODO: (20) Update initUI method to decrypt messages
-  // on first load
-
-  // TODO: (18) Define a method that decrypts any
-  // encrypted messages in the UI
+  function decryptMessages() {
+    $(".message .content[data-encrypted=true]").each(function(element) {
+      var message = $(this);
+      var cipher = message.text();
+      var sender = message.data('sender');
+      api.cards.find(sender)
+        .then(function(cards){
+          var plainText = myKey.decryptThenVerify(cipher, cards).toString();
+          message.text(plainText);
+          message.attr("data-encrypted", 'false');
+        });
+    });
+  }
 
   // send a new message and clear the composer
   $('#message_composer').on('keypress', function(event) {

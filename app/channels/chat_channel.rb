@@ -1,7 +1,7 @@
-# TODO: (11) Require the Virgil SDK
+require 'virgil/sdk'
 
 class ChatChannel < ApplicationCable::Channel
-  # TODO: (12) Include the Virgil SDK Highlevel methods
+  include Virgil::SDK::HighLevel
 
   # subscribe to new incoming messages
   # between these 2 parties
@@ -18,7 +18,10 @@ class ChatChannel < ApplicationCable::Channel
                     user_id: current_user.id
   end
 
-  # TODO: (14) Implement a server side method to publish a card
+  def publishCard data
+    card = virgil.cards.import(data['card'])
+    virgil.cards.publish(card)
+  end
 
   private
 
@@ -28,5 +31,13 @@ class ChatChannel < ApplicationCable::Channel
     current_user.chats.find(params[:id])
   end
 
-  # TODO: (13) Initialize the Virgil SDK
+  def virgil
+    virgil = VirgilApi.new(context: VirgilContext.new(
+        access_token: "AT.1cde554c5a649b17fd9e07157e1a7db7fac61d71218b71082635795b6356e8eb",
+        credentials: VirgilAppCredentials.new(
+            app_id: "f83051ab51ece376bb5268bcd32169c1b25455154ea5408e3703a442b92966d5",
+            app_key_data: VirgilBuffer.from_file(Rails.root.join("app.virgilkey")),
+            app_key_password: "test"))
+    )
+  end
 end

@@ -7,8 +7,7 @@
       <%= message.created_at.strftime('%b %e, %l:%M %p') %>
     </span>
   </div>
-  <!-- TODO: (16) By default mark a message as encrypted -->
-  <div class="content" data-sender='<%= message.user.username %>'>
+  <div class="content" data-encrypted='true' data-sender='<%= message.user.username %>'>
     <%= message.content %>
   </div>
 </div>
